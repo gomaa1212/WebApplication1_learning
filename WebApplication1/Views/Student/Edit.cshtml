@@ -1,0 +1,71 @@
+﻿@model Student
+
+@{
+    ViewData["Title"] = "Edit Student";
+}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Edit Student</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Id" />
+						<input type="hidden" asp-for="FileUrl" />
+
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="GenderId" class="form-label">Gender Type</label>
+                            <select asp-for="GenderId" class="form-control" asp-items="ViewBag.Genders"></select>
+                            <span asp-validation-for="GenderId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="File" class="form-label">Image URL</label>
+                            <input type="file" asp-for="File" class="form-control" />
+                            <span asp-validation-for="File" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Files" class="form-label">Files</label>
+                            <input type="file" asp-for="Files" class="form-control" multiple />
+                            <span asp-validation-for="Files" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                Back
+                            </a>
+
+                            <button type="submit" class="btn btn-success">
+                                Edit Student
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+@section Script {
+    <partial name="_ValidationScriptsPartial" />
+}

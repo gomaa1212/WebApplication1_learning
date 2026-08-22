@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="container mt-5">
+
+    <div class="p-5 mb-4 bg-light rounded-3 shadow">
+        <div class="container-fluid py-5 text-center">
+
+            <h1 class="display-4 fw-bold text-primary">
+                Student Management System
+            </h1>
+
+            <p class="lead mt-3">
+                Welcome to the Student Management System.
+                Manage students easily by adding, editing, viewing, and deleting records.
+            </p>
+
+            <hr class="my-4" />
+
+            <a asp-controller="Student"
+               asp-action="Index"
+               class="btn btn-primary btn-lg me-2">
+                View Students
+            </a>
+
+            <a asp-controller="Student"
+               asp-action="Create"
+               class="btn btn-success btn-lg">
+                Add New Student
+            </a>
+
+        </div>
+    </div>
+
+    <div class="row text-center">
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h4 class="text-primary">📋 Students</h4>
+                    <p>Browse all students registered in the system.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h4 class="text-success">➕ Add</h4>
+                    <p>Add new students with their information and image.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h4 class="text-danger">🗑 Manage</h4>
+                    <p>Edit or delete student records whenever needed.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
