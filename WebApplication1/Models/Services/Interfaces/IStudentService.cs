@@ -10,5 +10,6 @@
         public Task<bool> IsNameExist(string name);
         public int numberOfStudents { get; }
         public Task<List<Student>> GetStudentsByGender(int genderId);
+        public int GetStudentCount();
     }
 }

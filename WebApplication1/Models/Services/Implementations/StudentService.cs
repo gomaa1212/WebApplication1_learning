@@ -127,6 +127,10 @@ namespace WebApplication1.Models.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
+        public int GetStudentCount()
+        {
+            return _db.Students.Count();
+        }
         #endregion
 
     }

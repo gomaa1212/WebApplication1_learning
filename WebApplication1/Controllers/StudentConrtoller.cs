@@ -35,6 +35,7 @@ namespace WebApplication1.Controllers
             }
             var students = await _studentService.GetStudents();
             ViewBag.Title = "students";
+            ViewBag.Count = students.Count;
             return View(students);
         }
         public async Task<IActionResult> Details(int id)
@@ -153,6 +154,7 @@ namespace WebApplication1.Controllers
             }
             ViewBag.Genders = new SelectList(await _genderService.GetAllGenders(), "Id", "Name",GenderId);
             var students = await _studentService.GetStudentsByGender(GenderId);
+            ViewBag.Count = students.Count;
             return View("Index", students);
 
 
