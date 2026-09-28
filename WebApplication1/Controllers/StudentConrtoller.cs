@@ -13,16 +13,12 @@ namespace WebApplication1.Controllers
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
-        private readonly IFileService _fileService;
         private readonly IGenderService _genderService;
-        private readonly IStudentImagesService _studentImagesService;
         private readonly IMapper _mapper;
-        public StudentController(IStudentService studentService, IFileService fileService, IGenderService genderService, IStudentImagesService studentImagesService, IMapper mapper)
+        public StudentController(IStudentService studentService, IGenderService genderService, IMapper mapper)
         {
             _studentService = studentService;
-            _fileService = fileService;
             _genderService = genderService;
-            _studentImagesService = studentImagesService;
             _mapper = mapper;
         }
 
@@ -67,7 +63,6 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AddStudentViewModel model)
         {
-            var studentImages = new List<StudentImages>();
 
             if (!ModelState.IsValid)
             {
@@ -78,21 +73,15 @@ namespace WebApplication1.Controllers
 
             }
             var student = _mapper.Map<Student>(model);
-            student.FileUrl = await _fileService.UploadFile(student.File, "images");
-            if (student.FileUrl == "no file choosen")
+            if (student.File is null)
             {
                 TempData["ErrorMessage"] = "Please upload a valid image file.";
                 ViewBag.Genders = new
                     SelectList(await _genderService.GetAllGenders(), "Id", "Name");
                 return View(model);
             }
-                var result = await _studentService.AddStudent(student);
-            foreach (var f in student.Files)
-            {
-                var fileUrl = await _fileService.UploadFile(f, "images");
-                studentImages.Add(new StudentImages { StudentId = result, FileUrl = fileUrl });
-            }
-            await _studentImagesService.AddStudentImage(studentImages);
+              await _studentService.AddStudent(student);
+            
             TempData["SuccessMessage"] = "Student created successfully!";
 
             return RedirectToAction("Index");
@@ -130,36 +119,11 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest("Student ID mismatch.");
             }
-            var studentImages = new List<StudentImages>();
             if (!ModelState.IsValid)
             {
-                foreach(var item in ModelState)
-                 {
-                    foreach (var error in item.Value.Errors)
-                    {
-                        Console.WriteLine($"Field: {item.Key}");
-                        Console.WriteLine($"Error: {error.ErrorMessage}");
-                    }
-                }
                 return View(student);
             }
-            if (student.File != null && student.File.Length > 0)
-            {
-                // نمسح الصورة القديمة قبل رفع الجديدة
-                await _fileService.DeleteFile(student.FileUrl);
-                student.FileUrl = await _fileService.UploadFile(student.File, "images");
-            }
-            if(student.Files?.Count>0)
-            {
-               
-                foreach (var f in student.Files)
-                {
-                    var fileUrl = await _fileService.UploadFile(f, "images");
-                    studentImages.Add(new StudentImages { StudentId = student.Id, FileUrl = fileUrl });
-                }
-                await _studentImagesService.AddStudentImage(studentImages);
-            }
-           
+             
             var updatedStudent = _mapper.Map<Student>(student);
             await _studentService.UpdateStudent(updatedStudent);
             TempData["EditMessage"] = "Student updated successfully!";

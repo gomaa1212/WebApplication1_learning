@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using WebApplication1.Data;
 using WebApplication1.SharedRepository.Interfaces;
 
@@ -52,5 +53,10 @@ namespace WebApplication1.SharedRepository.Impelementations
              _dbSet.Update(entity);
             await _context.SaveChangesAsync();
         }
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
+        }
+        
     }
 }

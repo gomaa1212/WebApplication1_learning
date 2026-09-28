@@ -4,7 +4,7 @@
     {
         public Task<List<Student>> GetStudents();
         public Task<Student?> GetStudentById(int id);
-        public Task<int> AddStudent(Student student);
+        public Task<string> AddStudent(Student student);
         public Task<string> UpdateStudent(Student student);
         public Task<string> DeleteStudent(int id);
         public Task<bool> IsNameEnExist(string nameEn);

@@ -2,6 +2,7 @@
 using WebApplication1.Repository.Interfaces;
 using WebApplication1.SharedRepository.Impelementations;
 using WebApplication1.SharedRepository.Interfaces;
+using WebApplication1.UnitOfWorks;
 
 namespace WebApplication1.Dependency_Injection
 {
@@ -13,6 +14,7 @@ namespace WebApplication1.Dependency_Injection
             services.AddScoped<IStudentImagesRepository, StudentImagesRepository>();
             services.AddScoped<IGenderRepository, GenderRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }
     }

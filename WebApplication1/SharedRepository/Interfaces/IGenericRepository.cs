@@ -1,4 +1,6 @@
-﻿namespace WebApplication1.SharedRepository.Interfaces
+﻿using Microsoft.EntityFrameworkCore.Storage;
+
+namespace WebApplication1.SharedRepository.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {
@@ -9,6 +11,7 @@
         public Task UpdateAsync(T entity);
         public Task DeleteAsync(T entity);
         public Task AddRangeAsync(IEnumerable<T> entities);
+        public Task<IDbContextTransaction> BeginTransactionAsync();
 
     }
 }
