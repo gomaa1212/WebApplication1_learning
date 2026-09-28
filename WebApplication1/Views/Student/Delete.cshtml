@@ -1,4 +1,4 @@
-﻿@model Student
+﻿@model GetAllStudentViewModel
 
 @{
     ViewData["Title"] = "Delete Student";
@@ -29,7 +29,7 @@
                 <p class="text-muted">
                     Student ID: @Model.Id
                     <hr />
-					Gender : @Model.Gender?.Name
+					Gender : @Model.GenderName
                 </p>
 
                 <hr />

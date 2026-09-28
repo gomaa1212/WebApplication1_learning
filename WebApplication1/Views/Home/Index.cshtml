@@ -1,6 +1,9 @@
-﻿@{
+﻿@* @{
     ViewData["Title"] = "Home";
-}
+} *@
+@* <div>
+    <h1>@TempData["Message"]</h1>
+</div> *@
 
 <div class="container mt-5">
 
@@ -24,10 +27,10 @@
                 View Students
             </a>
 
-            <a asp-controller="Student"
-               asp-action="Create"
+            <a asp-controller="Gender"
+               asp-action="Index"
                class="btn btn-success btn-lg">
-                Add New Student
+                Genders
             </a>
 
         </div>

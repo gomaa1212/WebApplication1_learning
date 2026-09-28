@@ -20,7 +20,8 @@ namespace WebApplication1.Data
         {
             modelBuilder.Entity<Student>().ToTable("Students");
             modelBuilder.Entity<Student>().HasKey(s => s.Id);
-            modelBuilder.Entity<Student>().Property(s => s.Name).HasColumnType("nvarchar(100)").IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<Student>().Property(s => s.NameEn).HasColumnType("nvarchar(100)").IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<Student>().Property(s => s.NameAr).HasColumnType("nvarchar(100)").IsRequired().HasMaxLength(100);
             modelBuilder.Entity<Student>().Property(s => s.FileUrl).HasMaxLength(200);
 
             modelBuilder.Entity<Student>()
@@ -30,10 +31,10 @@ namespace WebApplication1.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<StudentImages>().ToTable("StudentImages");
-            modelBuilder.Entity<StudentImages>()
-                .HasOne(s => s.Student)
-                .WithMany(t => t.StudentImages)
-                .HasForeignKey(s => s.StudentId);
+            //modelBuilder.Entity<StudentImages>()
+            //    .HasOne(s => s.Student)
+            //    .WithMany(t => t.StudentImages)
+            //    .HasForeignKey(s => s.StudentId);
 
         }
     }

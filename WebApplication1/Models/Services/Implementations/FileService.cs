@@ -15,7 +15,7 @@ namespace WebApplication1.Models.Services.Implementations
         {
             if (file == null || file.Length == 0)
             {
-                throw new ArgumentException("File is null or empty", nameof(file));
+                return "no file choosen";
             }
             
             var path = Path.Combine(_webHostEnvironment.WebRootPath, location);

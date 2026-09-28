@@ -1,0 +1,76 @@
+﻿@model GetAllGenderViewModel
+
+@{
+    ViewData["Title"] = "Gender Details";
+}
+
+<div class="container mt-4">
+
+    <!-- Gender Header -->
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h2 class="fw-bold mb-1">
+                        Gender Details
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Students for gender:
+                        <span class="fw-semibold text-dark">
+                            @Model.name
+                        </span>
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.id"
+                       class="btn btn-warning">
+
+                        Edit Gender
+
+                    </a>
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        Back
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Students -->
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h4 class="fw-bold mb-4">
+                Students
+            </h4>
+
+            @await Html.PartialAsync(
+                "_StudentListPartial",
+                Model.students
+            )
+
+        </div>
+
+    </div>
+
+</div>

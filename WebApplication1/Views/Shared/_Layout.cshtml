@@ -1,12 +1,27 @@
 ﻿@inject IStudentService _studentService
+@inject IStringLocalizer<SharedResources> _localizer
+
+@{
+	var isRtl = CulutureHelper.IsRightToLeft();
+}
+
 <!DOCTYPE html>
-<html>
+<html dir="@(isRtl ? "rtl" : "ltr")">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"]</title>
 
-    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+	@if(isRtl)
+        {
+        <link href="~/lib/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet" />
+        }
+    else
+        {
+        <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        }
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -56,9 +71,17 @@
 
                     <li class="nav-item">
                         <a class="nav-link"
-                           asp-controller="Student"
-                           asp-action="Create">
-                            Add Student
+                           asp-controller="Gender"
+                           asp-action="Index">
+                            Genders
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="Home"
+                           asp-action="Privacy">
+                            @_localizer[SharedResourcesKeys.Privacy]
                         </a>
                     </li>
 
@@ -69,13 +92,25 @@
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="container body-content" style="margin-top:60px">
         @RenderBody()
+        <hr>
+        <footer>
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; @System.DateTime.Now - Localization</p>
+                </div>
+                <div class="col-md-6 text-right">
+                    @await Html.PartialAsync("_SelectLanguagePartial")
+                </div>
+            </div>
+        </footer>
     </div>
 
+    <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    @await RenderSectionAsync("script", false)
+    @await RenderSectionAsync("Script", false)
 
 </body>
 </html>

@@ -3,6 +3,15 @@
 @{
     ViewData["Title"] = "Add Student";
 }
+<script src="~/lib/jquery/jquery.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        toastr.error('@TempData["ErrorMessage"]');
+    </script>
+}
 
 <div class="container mt-5">
 
@@ -21,9 +30,15 @@
 
                        
                         <div class="mb-3">
-                            <label asp-for="Name" class="form-label"></label>
-                            <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <label asp-for="NameEn" class="form-label"></label>
+                            <input asp-for="NameEn" class="form-control" />
+                            <span asp-validation-for="NameEn" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NameAr" class="form-label"></label>
+                            <input asp-for="NameAr" class="form-control" />
+                            <span asp-validation-for="NameAr" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">

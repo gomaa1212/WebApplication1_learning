@@ -1,0 +1,98 @@
+﻿@model UpdateGenderViewModel
+
+@{
+    ViewData["Title"] = "Edit Gender";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <div class="mb-4">
+
+                <h2 class="fw-bold mb-1">
+                    Edit Gender
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Update gender information
+                </p>
+
+            </div>
+
+
+            <form asp-controller="Gender"
+                  asp-action="Edit"
+                  method="post">
+
+                <!-- Hidden Id -->
+                <input asp-for="Id" type="hidden" />
+
+
+                <!-- Gender English -->
+                <div class="mb-3">
+
+                    <label asp-for="NameEn"
+                           class="form-label fw-semibold">
+                        Gender English
+                    </label>
+
+                    <input asp-for="NameEn"
+                           class="form-control"
+                           placeholder="Enter gender in English" />
+
+                    <span asp-validation-for="NameEn"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Gender Arabic -->
+                <div class="mb-3">
+
+                    <label asp-for="NameAr"
+                           class="form-label fw-semibold">
+                        Gender Arabic
+                    </label>
+
+                    <input asp-for="NameAr"
+                           class="form-control"
+                           placeholder="Enter gender in Arabic" />
+
+                    <span asp-validation-for="NameAr"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Buttons -->
+                <div class="mt-4">
+
+                    <button type="submit"
+                            class="btn btn-warning">
+                        Update
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary ms-2">
+                        Back
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Script {
+    <partial name="_ValidationScriptsPartial" />
+}

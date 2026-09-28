@@ -4,21 +4,21 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WebApplication1.Data;
 using WebApplication1.Models.Services.Interfaces;
+using WebApplication1.Repository.Interfaces;
 
 namespace WebApplication1.Models.Services.Implementations
 {
     public class StudentService : IStudentService
     {
         #region fields
-        private List<Student> students;
+        private readonly IStudentRepository _studentRepository;
         private readonly IFileService _fileService;
-        private readonly AppDbContext _db;
         #endregion
 
         #region constructor
-        public StudentService(IFileService fileService, AppDbContext db)
+        public StudentService(IFileService fileService, IStudentRepository studentRepository)
         {
-            _db = db;
+            _studentRepository = studentRepository;
             _fileService = fileService;
         }
         #endregion
@@ -28,9 +28,7 @@ namespace WebApplication1.Models.Services.Implementations
         {
             try
             {
-                await _db.Students.AddAsync(student);
-                await _db.SaveChangesAsync();
-
+                await _studentRepository.AddAsync(student);
                 return student.Id;
             }
             catch(Exception ex)
@@ -43,9 +41,9 @@ namespace WebApplication1.Models.Services.Implementations
         {
             try
             {
-                var res =await GetStudentById(id);
+                var res =await _studentRepository.GetByIdAsync(id);
 
-                if(res == null)
+                if (res == null)
                     throw new Exception("Student not found");
 
                 _fileService.DeleteFile(res.FileUrl);
@@ -54,10 +52,8 @@ namespace WebApplication1.Models.Services.Implementations
                     _fileService.DeleteFile(image.FileUrl);
                 }
 
-                    _db.Students.Remove(res); 
+                    await _studentRepository.DeleteAsync(res); 
                 
-                await _db.SaveChangesAsync();
-
                 return "Student deleted successfully";
             }
             catch(Exception ex)
@@ -69,12 +65,13 @@ namespace WebApplication1.Models.Services.Implementations
 
         public async Task<Student?> GetStudentById(int id)
         {
-            return await _db.Students.Include(x=>x.Gender).Include(x=>x.StudentImages).FirstOrDefaultAsync(s => s.Id == id);
+            return await _studentRepository.GetAsQueryable().Include(s=>s.Gender).Include(s=>s.StudentImages).FirstOrDefaultAsync(s => s.Id == id);
         }
+
 
         public async Task<List<Student>> GetStudents()
         {
-            return await _db.Students.Include(x=>x.Gender).Include(x=>x.StudentImages).ToListAsync();
+            return await _studentRepository.GetAsQueryable().Include(s=>s.StudentImages).ToListAsync();
         }
 
         public async Task<string> UpdateStudent(Student student)
@@ -84,11 +81,11 @@ namespace WebApplication1.Models.Services.Implementations
                 var res = await GetStudentById(student.Id);
                 if (res != null)
                 {
-                    res.Name = student.Name;
+                    res.NameEn = student.NameEn;
+                    res.NameAr = student.NameAr;
                     res.FileUrl = student.FileUrl;
                     res.GenderId = student.GenderId;
-                    _db.Students.Update(res);
-                    await _db.SaveChangesAsync();
+                    await _studentRepository.UpdateAsync(res);
                     return "Student updated successfully";
                 }
                 else
@@ -102,20 +99,31 @@ namespace WebApplication1.Models.Services.Implementations
             }
             
         }
-        public async Task<bool> IsNameExist(string name)
+        public async Task<bool> IsNameEnExist(string nameEn)
         {
-            return await _db.Students.AnyAsync(s => s.Name == name);
+            return await _studentRepository.GetAsQueryable().AnyAsync(s => s.NameEn == nameEn);
         }
-
+        public async Task<bool> IsNameArExist(string nameAr)
+        {
+            return await _studentRepository.GetAsQueryable().AnyAsync(s => s.NameAr == nameAr);
+        }
+        public async Task<bool> IsNameArExistForUpdate(string nameAr, int id)
+        {
+            return await _studentRepository.GetAsQueryable().AnyAsync(s => s.NameAr == nameAr && s.Id != id);
+        }
+        public async Task<bool> IsNameEnExistForUpdate(string nameEn, int id)
+        {
+            return await _studentRepository.GetAsQueryable().AnyAsync(s => s.NameEn == nameEn && s.Id != id);
+        }
         public int numberOfStudents
         {
-            get { return _db.Students.Count(); }
+            get { return _studentRepository.GetAsQueryable().Count(); }
         }
         public async Task<List<Student>> GetStudentsByGender(int genderId)
         {
             try
             {
-                var students = await _db.Students.Include(x=>x.Gender).Include(x=>x.StudentImages).Where(s => s.GenderId == genderId).ToListAsync();
+                var students = await _studentRepository.GetAsQueryable().Include(x=>x.Gender).Include(x=>x.StudentImages).Where(s => s.GenderId == genderId).ToListAsync();
                 if (students == null || students.Count == 0)
                 {
                     throw new Exception("No students found for");
@@ -129,7 +137,15 @@ namespace WebApplication1.Models.Services.Implementations
         }
         public int GetStudentCount()
         {
-            return _db.Students.Count();
+            return _studentRepository.GetAsQueryable().Count();
+        }
+        public IQueryable<Student> SearchByName(string name)
+        {
+            if(string.IsNullOrEmpty(name))
+            {
+                return _studentRepository.GetAsQueryable().Include(s => s.StudentImages).Include(x=>x.Gender);
+            }
+            return _studentRepository.GetAsQueryable().Include(s => s.StudentImages).Include(x=>x.Gender).Where(s => s.NameEn.Contains(name) || s.NameAr.Contains(name));
         }
         #endregion
 
