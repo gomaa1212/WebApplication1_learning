@@ -10,6 +10,8 @@ namespace WebApplication1.UnitOfWorks
     {
         private readonly AppDbContext _context;
         private readonly Dictionary<Type, object> _repositories = new Dictionary<Type, object>();
+        private IDbContextTransaction _transaction;
+        private bool IsDispose = false;
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
@@ -31,7 +33,13 @@ namespace WebApplication1.UnitOfWorks
 
         public void Dispose()
         {
-            _context.Dispose();
+            if(!IsDispose)
+            {
+                _transaction.Dispose();
+                _context.Dispose();
+                GC.SuppressFinalize(this);
+                IsDispose = true;
+            }
         }
 
         public IGenericRepository<T> Repository<T>() where T : class
