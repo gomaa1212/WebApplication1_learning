@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using WebApplication1.Helper;
+using WebApplication1.Models.Identity;
 
 namespace WebApplication1.Models
 {
@@ -28,5 +29,6 @@ namespace WebApplication1.Models
         public List<StudentImages>? StudentImages { get; set; } 
         [NotMapped]
         public List<IFormFile>? Files { get; set; }
+        
     }
 }

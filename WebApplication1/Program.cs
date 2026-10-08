@@ -19,7 +19,7 @@ builder.Services.AddGeneralRegisterDependencyInjection(builder.Configuration);
 builder.Services.AddLocalizationDependencyInjection();
 builder.Services.AddServiceDependencyInjection();
 builder.Services.AddRepositoryDependencyInjection();
-
+builder.Services.AddIdentityDependencyInjection();
 
 // Languages
 builder.Services.Configure<RequestLocalizationOptions>(options =>
@@ -51,6 +51,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.UseSession();
 

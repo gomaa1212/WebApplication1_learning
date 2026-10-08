@@ -1,0 +1,82 @@
+﻿@model UpdateRoleViewModel
+
+@{
+    ViewData["Title"] = "Edit Role";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <div class="mb-4">
+
+                <h2 class="fw-bold mb-1">
+                    Edit Role
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Update Role information
+                </p>
+
+            </div>
+
+
+            <form asp-controller="Role"
+                  asp-action="Edit"
+                  method="post">
+
+                <!-- Hidden Id -->
+                <input asp-for="Id" type="hidden" />
+
+
+                <!-- Gender English -->
+                <div class="mb-3">
+
+                    <label asp-for="Name"
+                           class="form-label fw-semibold">
+                        Role Name
+                    </label>
+
+                    <input asp-for="Name"
+                           class="form-control"
+                           placeholder="Enter role name" />
+
+                    <span asp-validation-for="Name"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                
+
+
+                <!-- Buttons -->
+                <div class="mt-4">
+
+                    <button type="submit"
+                            class="btn btn-warning">
+                        Update
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary ms-2">
+                        Back
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Script {
+    <partial name="_ValidationScriptsPartial" />
+}

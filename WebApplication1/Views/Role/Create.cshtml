@@ -1,0 +1,76 @@
+﻿@model AddRoleViewModel
+
+@{
+    ViewData["Title"] = "Create Gender";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <div class="mb-4">
+                <h2 class="fw-bold mb-1">
+                    Create Role
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Add a new role
+                </p>
+            </div>
+
+
+            <form asp-controller="Role"
+                  asp-action="Create"
+                  method="post">
+
+                <!-- Role Name -->
+                <div class="mb-3">
+
+                    <label asp-for="Name"
+                           class="form-label fw-semibold">
+                        Role Name
+                    </label>
+
+                    <input asp-for="Name"
+                           class="form-control"
+                           placeholder="Enter role name" />
+
+                    <span asp-validation-for="Name"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                
+
+
+                <!-- Buttons -->
+                <div class="mt-4">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Create
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary ms-2">
+                        Back
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Script {
+    <partial name="_ValidationScriptsPartial" />
+}

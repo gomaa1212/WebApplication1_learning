@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using WebApplication1.Models;
@@ -8,6 +9,7 @@ using static Azure.Core.HttpHeader;
 
 namespace WebApplication1.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class GenderController : Controller
     {
         public readonly IGenderService _genderService;

@@ -29,29 +29,13 @@
 	</script>
 }
 
-<div class="alert alert-info">
-    Current Culture:
-    @System.Globalization.CultureInfo.CurrentCulture.Name
-    <br />
-
-    Current UI Culture:
-    @System.Globalization.CultureInfo.CurrentUICulture.Name
-    <br />
-
-    Gender:
-    @_localizer["Gender"]
-</div>
 
 
 
 <div class="container mt-4">
 
 
-	<div class="d-flex justify-content-between align-items-center mb-3">
-
-		<h2 class="text-primary fw-bold">
-			Students List -------Admin : @ViewBag.Admin
-		</h2>
+	<div class="d-flex justify-content-between align-items-center" >
 
 
 		<form asp-controller="Student"
@@ -78,16 +62,21 @@
 
 		</form>
 
-        
+		@if (User.IsInRole("Admin"))
+		{
+			<a asp-controller="Student"
+			   asp-action="Create"
+			   class="btn btn-success">
 
-		<a asp-controller="Student"
-		asp-action="Create"
-		class="btn btn-success">
+				<i class="bi bi-plus-circle"></i>
+				Add Student
 
-			<i class="bi bi-plus-circle"></i>
-			Add Student
+			</a>
+		}
+		</div>
+		
 
-		</a>
+		
 
 	</div>
 	<div class="row g-3 align-items-center mb-4">

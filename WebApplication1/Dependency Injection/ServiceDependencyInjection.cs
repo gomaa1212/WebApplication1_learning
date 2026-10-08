@@ -12,6 +12,8 @@ namespace WebApplication1.Dependency_Injection
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IGenderService, GenderService>();
             services.AddScoped<IStudentImagesService, StudentImagesServicem>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IClaimService, ClaimService>();
             return services;
         }
     }

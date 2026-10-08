@@ -1,70 +1,140 @@
-﻿@* @{
-    ViewData["Title"] = "Home";
-} *@
-@* <div>
-    <h1>@TempData["Message"]</h1>
-</div> *@
+﻿
+@inject SignInManager<User> _signInManager
 
-<div class="container mt-5">
 
-    <div class="p-5 mb-4 bg-light rounded-3 shadow">
-        <div class="container-fluid py-5 text-center">
+@{
+    Layout = null;
+}
 
-            <h1 class="display-4 fw-bold text-primary">
-                Student Management System
-            </h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-            <p class="lead mt-3">
-                Welcome to the Student Management System.
-                Manage students easily by adding, editing, viewing, and deleting records.
-            </p>
+    <title>Student Management System</title>
 
-            <hr class="my-4" />
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+</head>
 
-            <a asp-controller="Student"
-               asp-action="Index"
-               class="btn btn-primary btn-lg me-2">
-                View Students
-            </a>
+<body class="bg-light">
 
-            <a asp-controller="Gender"
-               asp-action="Index"
-               class="btn btn-success btn-lg">
-                Genders
-            </a>
+    <div class="container py-5">
+
+        <!-- Hero Section -->
+        <div class="card border-0 shadow-lg rounded-4 mb-5">
+            <div class="card-body text-center p-5">
+
+                <h1 class="display-4 fw-bold text-primary mb-3">
+                    Student Management System
+                </h1>
+
+                <p class="lead text-muted mb-4">
+                    Welcome to the Student Management System.
+                    Manage students easily by adding, editing, viewing,
+                    and deleting records.
+                </p>
+
+                <div class="d-flex justify-content-center gap-2">
+					@if (_signInManager.IsSignedIn(User))
+					{
+						<a asp-controller="Student"
+						   asp-action="Index"
+						   class="btn btn-success btn-lg px-4">
+							View Students
+						</a>
+					}
+					else
+					{
+						<a asp-controller="Account"
+						   asp-action="Register"
+						   class="btn btn-primary btn-lg px-4">
+							Register
+						</a>
+						<a asp-controller="Account"
+						   asp-action="LogIn"
+						   class="btn btn-outline-success btn-lg px-4">
+							Log in
+						</a>
+					}
+					
+                    
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Features -->
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body text-center p-4">
+
+                        <div class="display-5 mb-3">
+                            📋
+                        </div>
+
+                        <h4 class="fw-bold text-primary">
+                            Students
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            Browse all students registered in the system.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body text-center p-4">
+
+                        <div class="display-5 mb-3">
+                            ➕
+                        </div>
+
+                        <h4 class="fw-bold text-success">
+                            Add Students
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            Add new students with their information and image.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body text-center p-4">
+
+                        <div class="display-5 mb-3">
+                            ⚙️
+                        </div>
+
+                        <h4 class="fw-bold text-danger">
+                            Manage
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            Edit or delete student records whenever needed.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
 
         </div>
+
     </div>
 
-    <div class="row text-center">
+</body>
+</html>
 
-        <div class="col-md-4 mb-3">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h4 class="text-primary">📋 Students</h4>
-                    <p>Browse all students registered in the system.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-3">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h4 class="text-success">➕ Add</h4>
-                    <p>Add new students with their information and image.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-3">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h4 class="text-danger">🗑 Manage</h4>
-                    <p>Edit or delete student records whenever needed.</p>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-</div>

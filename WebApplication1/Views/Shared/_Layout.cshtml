@@ -1,8 +1,13 @@
-﻿@inject IStudentService _studentService
+﻿
+@inject IStudentService _studentService
 @inject IStringLocalizer<SharedResources> _localizer
+@inject SignInManager<User> _signInManager
+@inject UserManager<User> _userManager
+
+
 
 @{
-	var isRtl = CulutureHelper.IsRightToLeft();
+    var isRtl = CultureHelper.IsRightToLeft();
 }
 
 <!DOCTYPE html>
@@ -29,46 +34,25 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
 
-            <a class="navbar-brand"
-               asp-controller="Home"
-               asp-action="Index">
-                StudentMS
-            </a>
+            <ul class="navbar-nav ms-auto">
 
-            <div class="d-flex align-items-center ms-4">
-                <span class="text-light me-2">Students:</span>
-                <span class="badge bg-primary rounded-pill fs-6 px-3 py-2">
-                    @ViewBag.Count
-                </span>
-            </div>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       asp-controller="Home"
+                       asp-action="Index">
+                        Home
+                    </a>
+                </li>
 
-            <button class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-
-                <ul class="navbar-nav ms-auto">
-
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           asp-controller="Home"
-                           asp-action="Index">
-                            Home
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           asp-controller="Student"
-                           asp-action="Index">
-                            Students
-                        </a>
-                    </li>
-
+                <li class="nav-item">
+                    <a class="nav-link"
+                       asp-controller="Student"
+                       asp-action="Index">
+                        Students
+                    </a>
+                </li>
+				@if (User.IsInRole("Admin"))
+				{
                     <li class="nav-item">
                         <a class="nav-link"
                            asp-controller="Gender"
@@ -79,13 +63,103 @@
 
                     <li class="nav-item">
                         <a class="nav-link"
-                           asp-controller="Home"
-                           asp-action="Privacy">
-                            @_localizer[SharedResourcesKeys.Privacy]
+                           asp-controller="Role"
+                           asp-action="Index">
+                            Roles
                         </a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="User"
+                           asp-action="Index">
+                            Users
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="Claim"
+                           asp-action="Index">
+                            Claims
+                        </a>
+                    </li>
+				}
+				
+                
+                <li class="nav-item">
+                    <a class="nav-link"
+                       asp-controller="Home"
+                       asp-action="Privacy">
+                        @_localizer[SharedResourcesKeys.Privacy]
+                    </a>
+                </li>
+
+                <li class="d-flex align-items-center ms-4">
+                    <span class="text-light me-2">Students:</span>
+                    <span class="badge bg-primary rounded-pill fs-6 px-3 py-2">
+                        @ViewBag.Count
+                    </span>
+                </li>
+
+            </ul>
+
+
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item d-flex align-items-center ms-3">
+                        <div class="language-container">
+                            @await Html.PartialAsync("_SelectLanguagePartial")
+                        </div>
+                    </li>
+
+                        @if(_signInManager.IsSignedIn(User))
+                        {
+                        var currentUser = await _userManager.GetUserAsync(User);
+                            <li class="nav-item">
+                                 <form asp-controller="Account" asp-action="LogOut" method="post">
+                                       <button type="submit" class="btn btn-link nav-link">Log out</button>
+                                 </form>
+                             </li>
+                             <li class="nav-item">
+                                 <a class="nav-link" asp-controller="User" asp-action="Profile">
+								@if (User.IsInRole("Admin"))
+								{
+									<span class="badge bg-danger px-3 py-2 me-1">Admin</span>
+								}
+								
+                                     @currentUser.UserName
+                                 </a>
+                             </li>
+
+                       
+                            
+                        }
+                        else
+                        {
+                            
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Account"
+                                   asp-action="Register">
+                                    Register
+                                </a>
+                            </li>
+
+                        <li class="nav-item">
+                            <form asp-controller="Account" asp-action="LogIn" method="post">
+                                <button type="submit" class="btn btn-link nav-link">Log in</button>
+                            </form>
+                        </li>
+                        }
+
                 </ul>
+                
+
 
             </div>
 
@@ -94,17 +168,6 @@
 
     <div class="container body-content" style="margin-top:60px">
         @RenderBody()
-        <hr>
-        <footer>
-            <div class="row">
-                <div class="col-md-6">
-                    <p>&copy; @System.DateTime.Now - Localization</p>
-                </div>
-                <div class="col-md-6 text-right">
-                    @await Html.PartialAsync("_SelectLanguagePartial")
-                </div>
-            </div>
-        </footer>
     </div>
 
     <script src="~/lib/jquery/jquery.min.js"></script>

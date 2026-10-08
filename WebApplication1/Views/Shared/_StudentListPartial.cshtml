@@ -2,6 +2,7 @@
 @inject IViewLocalizer _localizer
 
 
+
 <div class="card shadow-sm">
 
     <div class="card-body">
@@ -106,36 +107,39 @@
                                 </a>
 
                             </td>
+                            @if(User.IsInRole("Admin"))
+                            {
+                                <!-- Edit -->
+                                <td>
+
+                                    <a asp-controller="Student"
+                                       asp-action="Edit"
+                                       asp-route-id="@s.Id"
+                                       class="btn btn-warning btn-sm">
+
+                                        Edit
+
+                                    </a>
+
+                                </td>
 
 
-                            <!-- Edit -->
-                            <td>
+                                <!-- Delete -->
+                                <td>
 
-                                <a asp-controller="Student"
-                                   asp-action="Edit"
-                                   asp-route-id="@s.Id"
-                                   class="btn btn-warning btn-sm">
+                                    <a asp-controller="Student"
+                                       asp-action="Delete"
+                                       asp-route-id="@s.Id"
+                                       class="btn btn-danger btn-sm">
 
-                                    Edit
+                                        Delete
 
-                                </a>
+                                    </a>
 
-                            </td>
+                                </td>
+                            }
 
-
-                            <!-- Delete -->
-                            <td>
-
-                                <a asp-controller="Student"
-                                   asp-action="Delete"
-                                   asp-route-id="@s.Id"
-                                   class="btn btn-danger btn-sm">
-
-                                    Delete
-
-                                </a>
-
-                            </td>
+                            
 
                         </tr>
                     }

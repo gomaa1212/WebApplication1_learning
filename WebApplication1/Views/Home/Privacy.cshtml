@@ -173,8 +173,11 @@
                             'Details' +
                             '</a>' +
                             '</td>' +
-
-                            '<td>' +
+									@if (User.IsInRole("Admin"))
+        {
+            
+        }
+        '<td>' +
                             '<a href="/Student/Edit/' + student.id + '" class="btn btn-warning btn-sm">' +
                             'Edit' +
                             '</a>' +

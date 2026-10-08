@@ -1,0 +1,125 @@
+﻿
+@model IEnumerable<GetUsersInRoleViewModel>
+
+@{
+    ViewData["Title"] = "Role Details";
+}
+
+<div class="container mt-4 mb-5">
+
+    <!-- Role Header -->
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                <div>
+                    <h2 class="fw-bold mb-1">
+                        Role Details
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Role:
+                        <span class="fw-semibold text-dark">
+                            @ViewData["RoleName"]
+                        </span>
+                    </p>
+                </div>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary px-4">
+                    ← Back
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Users Card -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+                    <h4 class="fw-bold mb-1">
+                        Users in this Role
+                    </h4>
+
+                    <p class="text-muted mb-0">
+                        Users assigned to this role
+                    </p>
+                </div>
+
+                <span class="badge bg-primary fs-6 px-3 py-2">
+                    @Model.Count() Users
+                </span>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0 text-center">
+
+                    <thead class="table-dark">
+
+                        <tr>
+                            <th>#</th>
+                            <th>Full Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int counter = 1;
+                        }
+
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+
+                                <td class="fw-semibold text-muted">
+                                    @counter
+                                </td>
+
+                                <td class="fw-semibold">
+                                    @user.FullName
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-primary">
+                                        @user.UserName
+                                    </span>
+                                </td>
+
+                                <td class="text-muted">
+                                    @user.Email
+                                </td>
+
+                            </tr>
+
+                            counter++;
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+

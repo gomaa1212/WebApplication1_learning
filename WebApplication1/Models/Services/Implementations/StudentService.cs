@@ -42,7 +42,7 @@ namespace WebApplication1.Models.Services.Implementations
                 }
                 await _unitOFWork.Repository<StudentImages>().AddRangeAsync(studentImages);
                 await trans.CommitAsync();
-                return "Sucessful";
+                return "Succeeded";
             }
             catch(Exception ex)
             {
@@ -68,7 +68,7 @@ namespace WebApplication1.Models.Services.Implementations
 
                     await _unitOFWork.Repository<Student>().DeleteAsync(res);
                 await trans.CommitAsync();
-                return "Student deleted successfully";
+                return "Succeeded";
             }
             catch(Exception ex)
             {
@@ -87,9 +87,14 @@ namespace WebApplication1.Models.Services.Implementations
         {
             return await _unitOFWork.Repository<Student>().GetAsQueryable().Include(s=>s.StudentImages).ToListAsync();
         }
+        public  IQueryable<Student> GetStudentsWithoutInclude()
+        {
+            return  _unitOFWork.Repository<Student>().GetAsQueryable();
+        }
 
         public async Task<string> UpdateStudent(Student student)
         {
+            
             var trans = await _unitOFWork.BeginTransactionAsync();
             try
             {
@@ -122,7 +127,7 @@ namespace WebApplication1.Models.Services.Implementations
                     res.GenderId = student.GenderId;
                     await _unitOFWork.Repository<Student>().UpdateAsync(res);
                     await trans.CommitAsync();
-                    return "Student updated successfully";
+                    return "Succeeded";
                 }
                 else
                 {

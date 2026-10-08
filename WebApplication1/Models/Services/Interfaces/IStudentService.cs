@@ -15,5 +15,7 @@
         public Task<List<Student>> GetStudentsByGender(int genderId);
         public int GetStudentCount();
         public IQueryable<Student> SearchByName(string name);
+        public IQueryable<Student> GetStudentsWithoutInclude();
+
     }
 }

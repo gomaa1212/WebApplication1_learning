@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using WebApplication1.Models.ViewModel.Students;
 
 namespace WebApplication1.Controllers
 {
+    [Authorize]
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
@@ -21,7 +23,7 @@ namespace WebApplication1.Controllers
             _genderService = genderService;
             _mapper = mapper;
         }
-
+        
         public async Task<IActionResult> Index(string name)
         {
             var Gender = new Gender();
@@ -34,6 +36,10 @@ namespace WebApplication1.Controllers
 
             var students =  _studentService.SearchByName(name);
             var res = await students.ToListAsync();
+            if(res == null || res.Count == 0)
+            {
+                return NotFound();
+            }
             var GetStudents = _mapper.Map<List<GetAllStudentViewModel>>(res);
             ViewBag.Title = "students";
             ViewBag.Count = res.Count;
@@ -52,6 +58,7 @@ namespace WebApplication1.Controllers
             var res = _mapper.Map<GetAllStudentViewModel>(student);
             return View(res);
         }
+        [Authorize(Policy = "CreateStudent")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -60,14 +67,14 @@ namespace WebApplication1.Controllers
             ViewBag.Genders = new SelectList(await _genderService.GetAllGenders(), "Id", Gender.localize("NameEn", "NameAr"));
             return View();
         }
+        [Authorize(Policy = "CreateStudent")]
         [HttpPost]
         public async Task<IActionResult> Create(AddStudentViewModel model)
         {
-
+            var Gender = new Gender();
+            ViewBag.Genders = new SelectList(await _genderService.GetAllGenders(), "Id", Gender.localize("NameEn", "NameAr"));
             if (!ModelState.IsValid)
             {
-                var Gender = new Gender();
-                ViewBag.Genders = new SelectList(await _genderService.GetAllGenders(), "Id", Gender.localize("NameEn", "NameAr"));
                 TempData["ErrorMessage"] = "Please fill in all required fields.";
                 return View(model);
 
@@ -76,29 +83,40 @@ namespace WebApplication1.Controllers
             if (student.File is null)
             {
                 TempData["ErrorMessage"] = "Please upload a valid image file.";
-                ViewBag.Genders = new
-                    SelectList(await _genderService.GetAllGenders(), "Id", "Name");
                 return View(model);
             }
-              await _studentService.AddStudent(student);
+            var res=await _studentService.AddStudent(student);
+            if(res != "Succeeded")
+            {
+                ModelState.AddModelError(string.Empty, res);
+                return View(model);
+            }
             
             TempData["SuccessMessage"] = "Student created successfully!";
 
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var student = await _studentService.GetStudentById(id);
             var res = _mapper.Map<GetAllStudentViewModel>(student);
             return View(res);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Delete(Student student)
         {
-            await _studentService.DeleteStudent(student.Id);
+            var res =await _studentService.DeleteStudent(student.Id);
+            if(res != "Succeeded")
+            {
+                ModelState.AddModelError(string.Empty, res);
+                return RedirectToAction("Delete", new { id = student.Id });
+            }
             TempData["DeleteMessage"] = "Student deleted successfully!";
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -112,10 +130,13 @@ namespace WebApplication1.Controllers
             var res = _mapper.Map<UpdateStudentViewModel>(student);
             return View(res);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(int id, UpdateStudentViewModel student)
         {
-            if(id != student.Id)
+            var Gender = new Gender();
+            ViewBag.Genders = new SelectList(await _genderService.GetAllGenders(), "Id", Gender.localize("NameEn", "NameAr"), student.GenderId);
+            if (id != student.Id)
             {
                 return BadRequest("Student ID mismatch.");
             }
@@ -125,7 +146,12 @@ namespace WebApplication1.Controllers
             }
              
             var updatedStudent = _mapper.Map<Student>(student);
-            await _studentService.UpdateStudent(updatedStudent);
+            var res = await _studentService.UpdateStudent(updatedStudent);
+            if(res != "Succeeded")
+            {
+                ModelState.AddModelError(string.Empty, res);
+                return View(student);
+            }
             TempData["EditMessage"] = "Student updated successfully!";
             return RedirectToAction("Index");
         }
@@ -163,10 +189,19 @@ namespace WebApplication1.Controllers
             }
             var Gender = new Gender();
             ViewBag.Genders = new SelectList(await _genderService.GetAllGenders(), "Id", Gender.localize("NameEn", "NameAr"),GenderId);
-            var students = await _studentService.GetStudentsByGender(GenderId);
-            ViewBag.Count = students.Count;
-            var res = _mapper.Map<List<GetAllStudentViewModel>>(students);
-            return View("Index", res);
+            try
+            {
+                var students = await _studentService.GetStudentsByGender(GenderId);
+                ViewBag.Count = students.Count;
+                var res = _mapper.Map<List<GetAllStudentViewModel>>(students);
+                return View("Index", res);
+
+            }
+            catch 
+            {
+                return NotFound("No Students found for the selected gender.");
+            }
+
         }
         public async Task<IActionResult> SearchByName(string name)
         {

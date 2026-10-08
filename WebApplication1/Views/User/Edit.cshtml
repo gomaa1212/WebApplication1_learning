@@ -1,0 +1,134 @@
+﻿@model UpdateUserViewModel
+
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <div class="mb-4">
+
+                <h2 class="fw-bold mb-1">
+                    Edit User
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Update User information
+                </p>
+
+            </div>
+
+
+            <form asp-controller="User"
+                  asp-action="Edit"
+                  method="post">
+
+                <!-- Hidden Id -->
+                <input asp-for="Id" type="hidden" />
+
+
+                <!-- User English -->
+                <div class="mb-3">
+
+                    <label asp-for="FullNameEn"
+                           class="form-label fw-semibold">
+                        Full Name (English)
+                    </label>
+
+                    <input asp-for="FullNameEn"
+                           class="form-control"
+                           placeholder="Enter full name (English)" />
+
+                    <span asp-validation-for="FullNameEn"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- User Arabic -->
+                <div class="mb-3">
+
+                    <label asp-for="FullNameAr"
+                           class="form-label fw-semibold">
+                        Full Name (Arabic)
+                    </label>
+
+                    <input asp-for="FullNameAr"
+                           class="form-control"
+                           placeholder="Enter full name (Arabic)" />
+
+                    <span asp-validation-for="FullNameAr"
+                          class="text-danger">
+                    </span>
+
+                </div>
+                
+                <!-- Address English -->
+                <div class="mb-3">
+
+                    <label asp-for="AddressEn"
+                           class="form-label fw-semibold">
+                        Address (English)
+                    </label>
+
+                    <input asp-for="AddressEn"
+                           class="form-control"
+                           placeholder="Enter address (English)" />
+
+                    <span asp-validation-for="AddressEn"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- Adress Arabic -->
+                <div class="mb-3">
+
+                    <label asp-for="AddressAr"
+                           class="form-label fw-semibold">
+                        Address (English)
+                    </label>
+
+                    <input asp-for="AddressAr"
+                           class="form-control"
+                           placeholder="Enter address (Arabic)" />
+
+                    <span asp-validation-for="AddressAr"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Buttons -->
+                <div class="mt-4">
+
+                    <button type="submit"
+                            class="btn btn-warning">
+                        Update
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary ms-2">
+                        Back
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Script {
+    <partial name="_ValidationScriptsPartial" />
+}
